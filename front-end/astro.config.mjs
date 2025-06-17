@@ -15,15 +15,26 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  experimental: {
+    session:true
+  },
   adapter: cloudflare(
     {
+      imageService:'passthrough',
       platformProxy: {
         enabled: true,
+        configPath: 'wrangler.toml',
+        persist: {
+          path: './.cache/wrangler/v3'
+        },
       },
       routes: {
         extend: {
-          include: [{ pattern: '/api/*' }],
-          exclude: [{ pattern: '/pages/*' }],
+          include: [
+            { pattern: '/api/*' },
+            { pattern: '/blog/*' },
+          ],
+          exclude: [{ pattern: '/**' }],
         }
       }
     }
